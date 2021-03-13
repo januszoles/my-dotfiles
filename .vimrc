@@ -13,7 +13,7 @@ set path+=**
 "Display all matching files when we tab complete
 set wildmenu
 
-"——————————————————— SHOW WHITE SPACE ––––––––––––––––––––––––––––––––––––––––
+"——————————————————— SHOW WHITE SPACE ————————————————————————————————————————
 set list
 set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¶,precedes:«,extends:» 
 
@@ -70,7 +70,6 @@ set undodir=~/.vim/undodir
 set undofile
 set incsearch
 set colorcolumn=80
-"highlight ColorColumn ctermgb=0 guibg=lightgrey
 set ruler                              " show the cursor position all the time
 set hlsearch                           " search highlighting
 set showmode                           " Show current mode
@@ -83,7 +82,6 @@ Plug 'leafgarland/typescript-vim'
 Plug 'vim-utils/vim-man'
 Plug 'lyuts/vim-rtags'
 Plug 'mbbill/undotree'
-
 call plug#end()                        " Initialize plugin system
 
 colorscheme gruvbox
@@ -94,10 +92,28 @@ setlocal spell spelllang=pl,en_us      " PL EN Spellchecker
 "command `Wrap` will wrap text to the width of screen.
 command! -nargs=* Wrap set wrap linebreak
 
-" print shebang
+"———— Insert/Delete Blank Line in Normal Mode—————————————————————————————————
+
+" README:
+" How to Map `j` `k` with <Alt> on MAC?
+" In terminal type Ctrl+V and then Alt+J it will print something. eg.: `∆`  
+" or in Vim in `INSERT` mode type Alt-J it will print the same."
+" My keyboard <A-j>==∆ and <A-k>==Ż
+
+" Alt-j/k inserts blank line below/above.
+nnoremap <silent>∆ :set paste<CR>m`o<Esc>``:set nopaste<CR>
+nnoremap <silent>Ż :set paste<CR>m`O<Esc>``:set nopaste<CR>
+
+" Ctrl-j/k deletes blank line below/above.
+nnoremap <silent><C-j> m`:silent +g/\m^\s*$/d<CR>``:noh<CR>
+nnoremap <silent><C-k> m`:silent -g/\m^\s*$/d<CR>``:noh<CR>
+
+"————Print ———————————————————————————————————————————————————————————————————
+" F2 Print Shebang
 :map <F2> i#!/usr/bin/env bash<ESC>2o<ESC>
-" print today date after pressing F3
+
+" F3 Print today date
 :map <F3> i# <ESC>:r!date "+\%F \%H:\%M, \%a" <ESC>kJo<ESC>
-":map <F3> i# Created on: <ESC>:r!LANG=en_US date "+\%a,\%e \%b \%Y, \%H:\%M" \| tr '[:lower:]' '[:upper:]' <ESC> kJ$o
-:map <F4> i# Created on: <ESC>:r!LANG=en_US date "+\%a,\%e \%b \%Y, \%H:\%M" <ESC> kJ$o
-"
+
+" F4 Print Created on:
+:map <F4> i# Created on: <ESC>:r!LANG=en_US date "+\%a, \%e \%b \%Y, \%H:\%M" <ESC>kJo<ESC>
