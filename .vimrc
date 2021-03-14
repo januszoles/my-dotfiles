@@ -1,9 +1,34 @@
 " auto reload vimrc when editing it
 autocmd! bufwritepost .vimrc source ~/.vimrc
 
-syntax on                              " syntax highlight
+"————————————————— SET LINE NUMBERS ——————————————————————————————————————————
+set number                             " show line numbers
+set relativenumber                     " show relative line numbers
+set numberwidth=5                      " width of number column
+"————————————————————————————————————————
+" toggle relative line number type: \nu
+"————————————————————————————————————————
+function! ToggleRelativeNumber()
+    let &relativenumber = &relativenumber?0:1
+    "let &number = &relativenumber? 0:1
+endfunction
+nnoremap <silent> <Leader>nu :call ToggleRelativeNumber()<cr>
+"————————————————————————————————————————
+" Toggle line numbers from none at all
+" to relative numbering with current line number
+noremap <F6> :set invnumber invrelativenumber<CR>
+"—————————————————————————————————————————————————————————————————————————————
 
-set noerrorbells                       " no sounds
+syntax on                               " Syntax highlight
+set noerrorbells                        " No sounds
+set nowrap                              " No soft wrap text
+" set smartcase                         " Case sensitive searching
+set ignorecase                          " Ignore case of searches
+set hlsearch                            " Highlight searches
+set incsearch                           " Highlight as pattern is typed
+set laststatus=2                        " Show status line
+set ruler                               " Show cursor position
+set showmode                            " Show current mode
 
 " FINDINGS FILES:
 " Seachr down into subfolders
@@ -17,7 +42,7 @@ set wildmenu
 set list
 set listchars=tab:→\ ,space:·,nbsp:␣,trail:•,eol:¶,precedes:«,extends:» 
 
-" toggle between invisible character by (backslash-L) `\l`
+" Toggle between invisible character by (backslash-L) `\l`
 nmap <leader>l :set list!<CR>
 
 "——————————————————— SET TAB STOPS ———————————————————————————————————————————
@@ -44,56 +69,41 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.rss setfiletype xml
 endif
 
-"————————————————— SET LINE NUMBERS ——————————————————————————————————————————
-set number                             " show line numbers
-set relativenumber                     " show relative line numbers
-set numberwidth=5                      " width of number column
-"————————————————————————————————————————
-" toggle relative line number type: \nu
-"————————————————————————————————————————
-function! ToggleRelativeNumber()
-    let &relativenumber = &relativenumber?0:1
-    "let &number = &relativenumber? 0:1
-endfunction
-nnoremap <silent> <Leader>nu :call ToggleRelativeNumber()<cr>
-"————————————————————————————————————————
-" Toggle line numbers from none at all
-" to relative numbering with current line number
-noremap <F6> :set invnumber invrelativenumber<CR>
-
-"—————————————————————————————————————————————————————————————————————————————
-set nowrap
-set smartcase                          " case sensitive searching
 set noswapfile
 set nobackup
 set undodir=~/.vim/undodir
 set undofile
-set incsearch
 set colorcolumn=80
-set ruler                              " show the cursor position all the time
-set hlsearch                           " search highlighting
-set showmode                           " Show current mode
 
 call plug#begin('~/.vim/plugged')      " Make sure you use single quotes
-Plug 'morhetz/gruvbox'
 Plug 'jremmen/vim-ripgrep'
 Plug 'tpope/vim-fugitive'
 Plug 'leafgarland/typescript-vim'
 Plug 'vim-utils/vim-man'
 Plug 'lyuts/vim-rtags'
 Plug 'mbbill/undotree'
+Plug 'morhetz/gruvbox'
 call plug#end()                        " Initialize plugin system
 
+"———— Load Color-Scheme after loading Color-Scheme-Plugin ————————————————————
 colorscheme gruvbox
 set background=dark
 
+"———— Set Cursor Line and Cursor Number. Backslash-C to Toggle it ————————————
+set cursorline
+:hi CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+" Set Cursor-Line-Number background to none
+:hi CursorLineNR ctermbg=NONE
+"Toggle `\c` cursor line
+:nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+
+"———— Spellchecker ———————————————————————————————————————————————————————————
 setlocal spell spelllang=pl,en_us      " PL EN Spellchecker
 
 "command `Wrap` will wrap text to the width of screen.
 command! -nargs=* Wrap set wrap linebreak
 
-"———— Insert/Delete Blank Line in Normal Mode—————————————————————————————————
-
+"———— Insert/Delete Blank Line in Normal Mode ————————————————————————————————
 " README:
 " How to Map `j` `k` with <Alt> on MAC?
 " In terminal type Ctrl+V and then Alt+J it will print something. eg.: `∆`  
